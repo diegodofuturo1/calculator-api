@@ -1,13 +1,13 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
-export class Command {
+export class ActionOperation {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  stageId: string;
+  operationId: string;
 
   @Column()
-  result: number;
+  actionId: string;
 }

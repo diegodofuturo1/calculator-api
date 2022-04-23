@@ -1,19 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Operation } from 'src/entity/operation.entity';
-import { Repository } from 'typeorm';
+import { CommandBus, EventBus, QueryBus } from '@nestjs/cqrs'
+import { ReadOperationQuery } from './query/read-operation.query';
+import { CreateOperationCommand } from './command/create-operation.command';
 
 @Injectable()
 export class OperationService {
     constructor(
-        @InjectRepository(Operation) private repository: Repository<Operation>
+      private readonly commandBus: CommandBus,
+      private readonly queryBus: QueryBus,
+      private readonly eventBus: EventBus
     ) { }
 
     async getOperation(): Promise<Operation[]> {
-      return await this.repository.find();
+      return await this.queryBus.execute(new ReadOperationQuery({}));
     }
     async createOperation(operation: Operation): Promise<Operation> {
-      const entity = this.repository.create(operation);
-      return await this.repository.save(entity)
+        return await this.commandBus.execute(new CreateOperationCommand(operation))
     }
 }

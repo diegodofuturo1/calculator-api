@@ -1,7 +1,2 @@
-POST http://localhost:3000/operation
+GET http://localhost:8081/operation
 content-type: application/json
-
-{
-  "type": "addiction",
-  "value": 2
-}
