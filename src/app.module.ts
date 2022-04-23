@@ -1,10 +1,9 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import Entity from './entity';
-import { OperationController } from './module/operation/operation.controller';
-import { OperationModule } from './module/operation/operation.module';
+import { Module } from '@nestjs/common';
+import { AppService } from './app.service';
+import { AppController } from './app.controller';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { OperationModule } from './endpoint/operation/operation.module';
 
 const typeormConfig: TypeOrmModuleOptions = {
   type: 'mysql',
