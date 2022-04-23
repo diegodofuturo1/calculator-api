@@ -1,0 +1,7 @@
+POST http://localhost:3000/operation
+content-type: application/json
+
+{
+  "type": "addiction",
+  "value": 2
+}
