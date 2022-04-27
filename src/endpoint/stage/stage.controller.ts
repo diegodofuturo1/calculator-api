@@ -1,0 +1,33 @@
+import { Controller, Get, Body, Post, Put, Delete, Param } from '@nestjs/common';
+import { Stage } from 'src/entity/stage.entity';
+import { StageService } from './stage.service';
+
+@Controller('stage')
+export class StageController {
+  constructor(private readonly service: StageService) {}
+
+  @Get()
+  async getStage() {
+    return await this.service.getStage();
+  }
+
+  @Get(':id')
+  async getStageById(@Param('id') id: string) {
+    return await this.service.getStageById(id);
+  }
+
+  @Post()
+  async postStage(@Body() body: Stage) {
+    return await this.service.createStage(body);
+  }
+
+  @Put()
+  async putStage(@Body() body: Stage) {
+    return await this.service.updateStage(body);
+  }
+
+  @Delete(':id')
+  async deleteStage(@Param('id') id: string) {
+    return await this.deleteStage(id)
+  }
+}

@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { operation } from '../type/operation.type';
+import { OperationType } from '../type/operation.type';
 
 @Entity()
 export class Operation {
@@ -10,5 +10,5 @@ export class Operation {
   value: number;
 
   @Column()
-  type: operation;
+  type: OperationType;
 }

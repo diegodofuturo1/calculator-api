@@ -1,1 +1,6 @@
-export type operation = 'addition' | 'substract' | 'multiplicate' | 'divisor';
+export enum OperationType {
+    'addition',
+    'substract',
+    'multiplicate',
+    'divisor',
+};
