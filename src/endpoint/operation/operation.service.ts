@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Stage } from 'src/entity/stage.entity';
-import { Action } from 'src/entity/action.entity';
 import { CommandBus, QueryBus } from '@nestjs/cqrs'
 import { Operation } from 'src/entity/operation.entity';
 import { ReadOperationQuery } from './query/read-operation.query';
@@ -10,7 +8,9 @@ import { DeleteOperationCommand } from './command/delete-operation.command';
 import { ReadOperationByStageQuery } from './query/read-operation-by-stage.query';
 import { ReadOperationByActionQuery } from './query/read-operation-by-action.query';
 import { RelateStageOperationCommand } from './command/relate-stage-operation.command';
-import { RelateActionOperationCommand } from './command/relate-action-operation.command';
+import { CreateOperationDto } from 'src/dto/create-operation.dto';
+import { ReadStageByIdQuery } from '../stage/query/read-stage-by-id.query';
+import { Stage } from 'src/entity/stage.entity';
 
 @Injectable()
 export class OperationService {
@@ -35,22 +35,16 @@ export class OperationService {
       return await this.queryBus.execute(new ReadOperationByStageQuery(stageId));
     }
 
-    async createOperation(operation: Operation): Promise<Operation> {
-        return await this.commandBus.execute(new CreateOperationCommand(operation))
+    async createOperation(operationDto: CreateOperationDto): Promise<Operation> {
+        const stage: Stage = await this.queryBus.execute(new ReadStageByIdQuery(operationDto.stageId))
+        const operation: Operation = await this.commandBus.execute(new CreateOperationCommand(operationDto))
+        await this.commandBus.execute(new RelateStageOperationCommand(stage, operation))
+
+        return operation
     }
 
     async deleteOperation(operationId: string): Promise<Operation> {
       const operation = await this.getOperationById(operationId);
       return await this.commandBus.execute(new DeleteOperationCommand(operation))
-    }
-
-    async relateActionOperation(action: Action, operationId: string): Promise<Operation> {
-      const operation = await this.getOperationById(operationId);
-      return await this.commandBus.execute(new RelateActionOperationCommand(action, operation))
-    }
-
-    async relateStageOperation(stage: Stage, operationId: string): Promise<Operation> {
-      const operation = await this.getOperationById(operationId);
-      return await this.commandBus.execute(new RelateStageOperationCommand(stage, operation))
     }
 }

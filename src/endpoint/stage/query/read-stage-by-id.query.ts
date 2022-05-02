@@ -19,6 +19,11 @@ export class ReadStageByIdQueryHandler implements IQueryHandler {
 
     async execute(query: ReadStageByIdQuery): Promise<Stage> {
         const { id } = query
-        return await this.repository.findOne({ id })
+        const stage = await this.repository.findOne({ id })
+
+        if (!stage)
+            throw { statusCode: 404, message: 'Stage não encontrado' }
+
+        return stage
     }
 }

@@ -9,6 +9,7 @@ import { ReadActionByIdQueryHandler } from "./query/read-action-by-id.query";
 import { ReadActionByStageQueryHandler } from "./query/read-action-by-stage.query";
 import { ReadActionQueryHandler } from "./query/read-action.query";
 import Entity from "src/entity";
+import { UpdateActionCommandHandler } from "./command/update-action.command";
 
 @Module({
   imports: [
@@ -24,10 +25,11 @@ import Entity from "src/entity";
     DeleteActionCommandHandler,
     ReadActionByIdQueryHandler,
     ReadActionByStageQueryHandler,
-    ReadActionQueryHandler
+    ReadActionQueryHandler,
+    UpdateActionCommandHandler,
   ],
   exports: [
-    ActionService
+    ActionService,
   ]
 })
 export class ActionModule {}

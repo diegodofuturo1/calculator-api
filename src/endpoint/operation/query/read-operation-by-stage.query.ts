@@ -5,7 +5,7 @@ import { IQuery, IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
 export class ReadOperationByStageQuery implements IQuery {
     constructor (
-        public readonly id: string
+        public readonly stageId: string
     ) { }
 }
 
@@ -17,8 +17,19 @@ export class ReadOperationByStageQueryHandler implements IQueryHandler {
         private readonly repository: Repository<Operation>
     ) { }
 
-    async execute(query: ReadOperationByStageQuery): Promise<Operation> {
-        return await this.repository.findOne(query.id)
+    async execute(query: ReadOperationByStageQuery): Promise<Operation[]> {
+        const { stageId } = query
+
+        const operations = await this.repository
+            .createQueryBuilder('O')
+            .innerJoin('StageOperation', 'S', 'O.id = S.operationId')
+            .where('S.stageId = :stageId', { stageId })
+            .getMany()
+
+        if (!operations || !operations.length)
+            throw { statusCode: 404, message: 'Nenhuma operação encontrada' }
+
+        return operations
     }
 
 }

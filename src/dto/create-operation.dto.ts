@@ -9,4 +9,7 @@ export class CreateOperationDto {
     @IsNotEmpty()
     @IsEnum(OperationType)
     type: OperationType;
+
+    @IsString()
+    stageId: string
 }

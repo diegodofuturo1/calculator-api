@@ -25,6 +25,11 @@ export class RelateStageOperationCommandHandler implements ICommandHandler<Relat
  
         const entity = this.repository.create({ stageId: stage.id, operationId: operation.id });
 
-        return await this.repository.save(entity);
+        const stageOperation = await this.repository.save(entity);
+
+        if (!stageOperation)
+            throw { statusCode: 404, message: 'Não foi possível relacionar Stage com Operation' }
+
+        return stageOperation
     }
 }

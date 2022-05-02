@@ -20,11 +20,16 @@ export class ReadOperationByActionQueryHandler implements IQueryHandler {
     async execute(query: ReadOperationByActionQuery): Promise<Operation[]> {
         const { actionId } = query
 
-        const operations = await this.repository
-            .createQueryBuilder('R')
-            .innerJoin('ActionOperation', 'A', 'R.id = A.operationId')
-            .where('A.id = :actionID', { actionId })
-            .getMany()
+        const operations = await this.repository.query(
+            'SELECT * FROM `Operation` `O` INNER JOIN `ActionOperation` `A` ON `A`.`operationId` = `O`.`id` WHERE `A`.`actionId` = ?',
+             [ actionId ]
+        )
+
+        console.log('[ACTIONID]', actionId)
+        console.log('[OPERATIONS]', operations)
+
+        if (!operations || !operations.length)
+            throw { statusCode: 404, message: 'Nenhuma Operation encontrada' }
 
         return operations
     }

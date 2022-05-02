@@ -6,6 +6,10 @@ import { CreateActionCommand } from './command/create-action.command';
 import { DeleteActionCommand } from './command/delete-action.command';
 import { ReadActionByStageQuery } from './query/read-action-by-stage.query';
 import { ReadActionByIdQuery } from './query/read-action-by-id.query';
+import { ReadStageByIdQuery } from '../stage/query/read-stage-by-id.query';
+import { ReadOperationByStageQuery } from '../operation/query/read-operation-by-stage.query';
+import { Operation } from 'src/entity/operation.entity';
+import { Stage } from 'src/entity/stage.entity';
 
 @Injectable()
 export class ActionService {
@@ -23,8 +27,11 @@ export class ActionService {
     async getActionByStage(stageId: string): Promise<Action[]> {
       return await this.queryBus.execute(new ReadActionByStageQuery(stageId));
     }
-    async createAction(action: Action): Promise<Action> {
-        return await this.commandBus.execute(new CreateActionCommand(action))
+    
+    async createAction(stageId: string): Promise<Action[]> {
+        const stage: Stage = await this.queryBus.execute(new ReadStageByIdQuery(stageId))
+        const operations: Operation[] = await this.queryBus.execute(new ReadOperationByStageQuery(stage.id))
+        return await this.commandBus.execute(new CreateActionCommand(stage, operations))
     }
     async deleteAction(actionId: string): Promise<Action> {
         const action = await this.queryBus.execute(new ReadActionByIdQuery(actionId))

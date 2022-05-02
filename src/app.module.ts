@@ -6,6 +6,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { OperationModule } from './endpoint/operation/operation.module';
 import { ActionModule } from './endpoint/action/action.module';
 import { StageModule } from './endpoint/stage/stage.module';
+import { CalculatorModule } from './endpoint/calculator/calculator.module';
 
 const typeormConfig: TypeOrmModuleOptions = {
   type: 'mysql',
@@ -19,7 +20,7 @@ const typeormConfig: TypeOrmModuleOptions = {
 };
 
 @Module({
-  imports: [ OperationModule, StageModule, ActionModule, TypeOrmModule.forRoot(typeormConfig)],
+  imports: [ OperationModule, StageModule, ActionModule, CalculatorModule, TypeOrmModule.forRoot(typeormConfig)],
   controllers: [AppController],
   providers: [AppService],
 })

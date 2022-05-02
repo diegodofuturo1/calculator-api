@@ -1,7 +1,9 @@
-import { Controller, Get, Body, Post, Put, Delete, Param } from '@nestjs/common';
-import { Stage } from 'src/entity/stage.entity';
+import { ApiTags } from '@nestjs/swagger';
 import { StageService } from './stage.service';
+import { Stage } from 'src/entity/stage.entity';
+import { Controller, Get, Body, Post, Put, Delete, Param } from '@nestjs/common';
 
+@ApiTags('stages')
 @Controller('stage')
 export class StageController {
   constructor(private readonly service: StageService) {}

@@ -1,15 +1,13 @@
-import { Controller, Get, Body, Post, Delete, Param } from '@nestjs/common';
-import { Operation } from 'src/entity/operation.entity';
-import { ActionService } from '../action/action.service';
-import { StageService } from '../stage/stage.service';
+import { ApiTags } from '@nestjs/swagger';
 import { OperationService } from './operation.service';
+import { CreateOperationDto } from 'src/dto/create-operation.dto';
+import { Controller, Get, Body, Post, Delete, Param } from '@nestjs/common';
 
+@ApiTags('operations')
 @Controller('operation')
 export class OperationController {
   constructor(
-    private readonly service: OperationService,
-    private readonly actionService: ActionService,
-    private readonly stageService: StageService,
+    private readonly service: OperationService
   ) {}
 
   @Get()
@@ -33,26 +31,12 @@ export class OperationController {
   }
   
   @Post()
-  async postOperation(@Body() body: Operation) {
+  async postOperation(@Body() body: CreateOperationDto) {
     return this.service.createOperation(body);
   }
   
   @Delete(':id')
   async deleteOperation(@Param('id') id: string) {
     return this.service.deleteOperation(id);
-  }
-
-  @Post('action')
-  async relateActionOperation(@Body() body: { actionId: string, operationId: string }) {
-    const { actionId, operationId } = body
-    const action = await this.actionService.getActionById(actionId)
-    return this.service.relateActionOperation(action, operationId)
-  }
-
-  @Post('stage')
-  async relateStageOperation(@Body() body: { stageId: string, operationId: string }) {
-    const { stageId, operationId } = body
-    const stage = await this.stageService.getStageById(stageId)
-    return this.service.relateStageOperation(stage, operationId)
   }
 }

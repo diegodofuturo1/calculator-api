@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity()
+@Entity('Action')
 export class Action {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -10,4 +10,7 @@ export class Action {
 
   @Column()
   result: number;
+
+  @Column({ default: false })
+  correct: boolean;
 }

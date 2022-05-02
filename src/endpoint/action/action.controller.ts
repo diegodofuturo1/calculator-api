@@ -1,7 +1,9 @@
-import { Controller, Get, Body, Post, Delete, Param } from '@nestjs/common';
-import { Action } from 'src/entity/action.entity';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { ActionService } from './action.service';
+import { Controller, Get, Body, Post, Delete, Param } from '@nestjs/common';
+import { CreateActionDto } from 'src/dto/create-action.dto';
 
+@ApiTags('actions')
 @Controller('action')
 export class ActionController {
   constructor(
@@ -22,13 +24,12 @@ export class ActionController {
   }
 
   @Post()
-  async postAction(@Body() body: Action) {
-    return await this.service.createAction(body);
+  async postAction(@Body() body: CreateActionDto) {
+    return await this.service.createAction(body.stageId);
   }
 
   @Delete(':id')
   async deleteAction(@Param('id') id: string) {
-    const deleteResult = await this.service.deleteAction(id);
-    return deleteResult
+    return await this.service.deleteAction(id);
   }
 }
