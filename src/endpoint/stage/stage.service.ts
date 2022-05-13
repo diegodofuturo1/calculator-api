@@ -23,9 +23,13 @@ export class StageService {
         return await this.queryBus.execute(new ReadStageByIdQuery(id));
     }
 
+    async getStageByLevel(level: number): Promise<Stage> {
+        return await this.queryBus.execute(new ReadStageByLevelQuery(level));
+    }
+
     async createStage(stage: Stage): Promise<Stage> {
         try {
-            const { id } = await this.queryBus.execute(new ReadStageByLevelQuery(stage.level))
+            const { id } = await this.getStageByLevel(stage.level)
             return this.updateStage({ ...stage, id })
         }
         catch {

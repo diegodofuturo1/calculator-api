@@ -18,6 +18,11 @@ export class StageController {
     return await this.service.getStageById(id);
   }
 
+  @Get('level/:level')
+  async getStageByLevel(@Param('level') level: number) {
+    return await this.service.getStageByLevel(level);
+  }
+
   @Post()
   async postStage(@Body() body: Stage) {
     return await this.service.createStage(body);
