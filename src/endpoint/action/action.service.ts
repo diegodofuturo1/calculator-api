@@ -4,12 +4,13 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs'
 import { ReadActionQuery } from './query/read-action.query';
 import { CreateActionCommand } from './command/create-action.command';
 import { DeleteActionCommand } from './command/delete-action.command';
-import { ReadActionByStageQuery } from './query/read-action-by-stage.query';
 import { ReadActionByIdQuery } from './query/read-action-by-id.query';
 import { ReadStageByIdQuery } from '../stage/query/read-stage-by-id.query';
 import { ReadOperationByStageQuery } from '../operation/query/read-operation-by-stage.query';
 import { Operation } from 'src/entity/operation.entity';
 import { Stage } from 'src/entity/stage.entity';
+import { ActionDto } from 'src/dto/action.dto';
+import { ReadActionOperationByStageQuery } from './query/read-action-operations.query';
 
 @Injectable()
 export class ActionService {
@@ -24,8 +25,8 @@ export class ActionService {
     async getActionById(actionId: string): Promise<Action> {
       return await this.queryBus.execute(new ReadActionByIdQuery(actionId));
     }
-    async getActionByStage(stageId: string): Promise<Action[]> {
-      return await this.queryBus.execute(new ReadActionByStageQuery(stageId));
+    async getActionByStage(stageId: string): Promise<ActionDto[]> {
+      return await this.queryBus.execute(new ReadActionOperationByStageQuery(stageId));
     }
     
     async createAction(stageId: string): Promise<Action[]> {

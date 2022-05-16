@@ -10,6 +10,7 @@ import { ReadActionByStageQueryHandler } from "./query/read-action-by-stage.quer
 import { ReadActionQueryHandler } from "./query/read-action.query";
 import Entity from "src/entity";
 import { UpdateActionCommandHandler } from "./command/update-action.command";
+import { ReadActionOperationByStageQueryHandler } from "./query/read-action-operations.query";
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { UpdateActionCommandHandler } from "./command/update-action.command";
     ReadActionByStageQueryHandler,
     ReadActionQueryHandler,
     UpdateActionCommandHandler,
+    ReadActionOperationByStageQueryHandler
   ],
   exports: [
     ActionService,

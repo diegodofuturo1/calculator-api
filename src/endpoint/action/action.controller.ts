@@ -1,4 +1,4 @@
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { ActionService } from './action.service';
 import { Controller, Get, Body, Post, Delete, Param } from '@nestjs/common';
 import { CreateActionDto } from 'src/dto/create-action.dto';

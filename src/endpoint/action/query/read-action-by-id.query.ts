@@ -19,6 +19,7 @@ export class ReadActionByIdQueryHandler implements IQueryHandler {
 
     async execute(query: ReadActionByIdQuery): Promise<Action> {
         const { id } = query
+        
         const action =  await this.repository.findOne({ id })
         
         if (!action)

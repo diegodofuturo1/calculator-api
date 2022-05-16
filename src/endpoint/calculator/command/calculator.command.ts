@@ -1,6 +1,7 @@
 import { ICommandHandler, CommandHandler, ICommand } from '@nestjs/cqrs';
 import { Operation } from 'src/entity/operation.entity';
 import { Stage } from 'src/entity/stage.entity';
+import { ActionType } from 'src/type/action.type';
 
 export class CalculatorCommand implements ICommand{
     constructor(
@@ -11,26 +12,21 @@ export class CalculatorCommand implements ICommand{
 
 @CommandHandler(CalculatorCommand)
 export class CalculatorCommandHandler implements ICommandHandler<CalculatorCommand> {
-    private run = [
-        (a: number, b: number) => a + b,
-        (a: number, b: number) => a - b,
-        (a: number, b: number) => a / b,
-        (a: number, b: number) => a * b,
-    ]
+    private run = {
+        addition: (a: number, b: number) => a + b,
+        substract: (a: number, b: number) => a - b,
+        divisor: (a: number, b: number) => a / b,
+        multiplicate: (a: number, b: number) => a * b,
+    }
 
-    async execute(event: CalculatorCommand): Promise<{ result: number, correct: boolean }> {
+    async execute(event: CalculatorCommand): Promise<{ result: number, status: ActionType }> {
         const { stage, operations } = event
         const { start, end } = stage
         
         const result: number = operations.reduce((value, operation) => {
-            console.log('[TYPE]', operation.type)
-            console.log('[RUN]', this.run)
-            console.log('[FUNCTION]', this.run[operation.type])
             return this.run[operation.type](value, operation.value)
         }, start)
 
-        console.log('[RESULT]', result)
-
-        return { result, correct: end == result }
+        return { result, status: end == result ? 'correct' : 'incorrect' }
     }
 }

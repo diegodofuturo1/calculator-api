@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { Action } from "src/entity/action.entity";
+import { Operation } from "src/entity/operation.entity";
 import { Stage } from "src/entity/stage.entity";
 import { UpdateActionCommand } from "../action/command/update-action.command";
 import { ReadActionByIdQuery } from "../action/query/read-action-by-id.query";
@@ -15,20 +16,12 @@ export class CalculatorService {
         private readonly commandBus: CommandBus,
     ) {}
 
-    async calculator(stageId: string, actionId: string) {
-        const [ stage, action ]: [ Stage, Action ] = await Promise.all([
-            this.queryBus.execute(new ReadStageByIdQuery(stageId)),
-            this.queryBus.execute(new ReadActionByIdQuery(actionId)),
-        ])
-
-        if (stage.id != action.stageId)
-            throw { statusCode: 400, message: 'Stage ou Action não encontrada' }
-
-        const operations = await this.queryBus.execute(new ReadOperationByActionQuery(action.id))
-        
-        const response = await this.commandBus.execute(new CalculatorCommand(stage, operations))
-        console.log('[RESPONSE]', response)
-        const { result, correct } = response
-        return await this.commandBus.execute(new UpdateActionCommand(action, { ...action, result, correct }))
+    async calculator(actionId: string) {
+        const action: Action = await this.queryBus.execute(new ReadActionByIdQuery(actionId))        
+        const stage: Stage = await this.queryBus.execute(new ReadStageByIdQuery(action.stageId))
+        const operations: Operation[] = await this.queryBus.execute(new ReadOperationByActionQuery(action.id))
+        const { result, status } = await this.commandBus.execute(new CalculatorCommand(stage, operations))
+        await this.commandBus.execute(new UpdateActionCommand(action, { ...action, result, status }))
+        return { ...action, result, status }
     }
 }

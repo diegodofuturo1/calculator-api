@@ -19,14 +19,11 @@ export class ReadStageByLevelQueryHandler implements IQueryHandler {
 
     async execute(query: ReadStageByLevelQuery): Promise<Stage> {
         const { level } = query
-
-        console.log('LEVEL', level)
         
         if (level <= 0)
         throw { statusCode: 404, message: 'Stage não encontrado' }
         
         const stage = await this.repository.findOne({ level })
-        console.log('STAGE', stage)
 
         if (!stage)
             throw { statusCode: 404, message: 'Stage não encontrado' }

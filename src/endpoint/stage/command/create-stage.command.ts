@@ -20,6 +20,8 @@ export class CreateStageCommandHandler implements ICommandHandler<CreateStageCom
     async execute(command: CreateStageCommand): Promise<Stage> {
         const { stage } = command
 
+        stage.id = undefined
+
         return this.repository.save(this.repository.create(stage))
     }
 }

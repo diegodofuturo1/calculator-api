@@ -1,7 +1,6 @@
 import { ApiTags } from "@nestjs/swagger";
-import { Body, Controller, Post } from "@nestjs/common";
+import { Controller, Get, Param } from "@nestjs/common";
 import { CalculatorService } from "./calculator.service";
-import { CreateCalculatorDto } from "src/dto/create-calculator.dto";
 
 @ApiTags('calculator')
 @Controller('calculator')
@@ -10,8 +9,8 @@ export class CalculatorController {
         private readonly service: CalculatorService
     ) {}
 
-    @Post()
-    async calculator(@Body() { stageId, actionId }: CreateCalculatorDto) {
-        return await this.service.calculator(stageId, actionId)
+    @Get(':actionId')
+    async calculator(@Param('actionId') actionId: string) {
+        return await this.service.calculator(actionId)
     }
 }

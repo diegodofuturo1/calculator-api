@@ -18,8 +18,13 @@ export class UpdateStageCommandHandler implements ICommandHandler {
         private readonly repository: Repository<Stage>
     ) { }
 
-    async execute(query: UpdateStageCommand): Promise<UpdateResult> {
+    async execute(query: UpdateStageCommand): Promise<Stage> {
         const { oldStage, newStage } = query
-        return await this.repository.update(oldStage, newStage)
+        const result: UpdateResult = await this.repository.update(oldStage, newStage)
+
+        if (!result.affected)
+            throw { message: 'Não foi possível salvar Stage', statusCode: 400 }
+
+        return { ...oldStage, ...newStage }
     }
 }

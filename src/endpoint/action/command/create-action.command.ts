@@ -33,7 +33,7 @@ export class CreateActionCommandHandler implements ICommandHandler<CreateActionC
         }
 
         const next = () => {
-            for (let i = 0; i < operations.length; i++) {
+            for (let i = 0; i < times; i++) {
                 indexes[i]++
                 if (indexes[i] >= operations.length)
                     indexes[i] = 0
@@ -63,18 +63,24 @@ export class CreateActionCommandHandler implements ICommandHandler<CreateActionC
         const list = this.createOperations(operations, stage.times)
 
         const promises = list.map(async operationIds => {
-            const entity = this.repositoryAction.create({ stageId: stage.id, correct: false, result: 0 })
+            const entity = this.repositoryAction.create({ stageId: stage.id })
             const action = await this.repositoryAction.save(entity)
 
-            const operations = await Promise.all(operationIds.map(async operationId => {
+            const _operations = await Promise.all(operationIds.map(async (operationId: string, order: number) => {
                 const actionId = action.id
-                const entity = this.repositoryActionOperation.create({ actionId, operationId })
-                const operation = await this.repositoryActionOperation.save(entity)
-                console.log('[OPERATION]', operation)
-                return operation
+                const entity = this.repositoryActionOperation.create({ actionId, operationId, order })
+                const actionOperation = await this.repositoryActionOperation.save(entity)
+
+                const operation = operations.find(operation => operation.id == actionOperation.operationId)
+                
+                return { 
+                    ...operation,
+                    order: actionOperation.order,
+                    actionId: actionOperation.actionId,
+                }
             }))
 
-            return { ...action, operations }
+            return { ...action, operations: _operations }
         })
 
         return await Promise.all(promises)

@@ -25,9 +25,6 @@ export class ReadOperationByActionQueryHandler implements IQueryHandler {
              [ actionId ]
         )
 
-        console.log('[ACTIONID]', actionId)
-        console.log('[OPERATIONS]', operations)
-
         if (!operations || !operations.length)
             throw { statusCode: 404, message: 'Nenhuma Operation encontrada' }
 
