@@ -1,3 +1,4 @@
+import { ActionType } from 'src/type/action.type';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('Action')
@@ -8,9 +9,9 @@ export class Action {
   @Column()
   stageId: string;
 
-  @Column()
+  @Column({ nullable: true })
   result: number;
 
-  @Column({ default: false })
-  correct: boolean;
+  @Column({ default: 'created' })
+  status: ActionType;
 }

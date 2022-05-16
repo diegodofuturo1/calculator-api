@@ -16,4 +16,7 @@ export class Stage {
 
   @Column()
   times: number;
+
+  @Column({ default: 'created' })
+  status: string;
 }

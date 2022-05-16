@@ -10,4 +10,7 @@ export class ActionOperation {
 
   @Column()
   actionId: string;
+
+  @Column()
+  order: number
 }
