@@ -1,5 +1,5 @@
 import { IsString, IsInt, IsEnum, IsNotEmpty } from 'class-validator'
-import { OperationType } from 'src/type/operation.type';
+import { OperationEnum, OperationType } from 'src/type/operation.type';
 
 export class CreateOperationDto {
     @IsInt()
@@ -7,7 +7,7 @@ export class CreateOperationDto {
 
     @IsString()
     @IsNotEmpty()
-    @IsEnum(OperationType)
+    @IsEnum(OperationEnum)
     type: OperationType;
 
     @IsString()
