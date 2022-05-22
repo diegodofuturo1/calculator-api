@@ -5,7 +5,7 @@ import { Stage } from 'src/entity/stage.entity';
 
 export class CreateStageCommand implements ICommand{
     constructor(
-        public readonly stage: Stage
+        public readonly stage: Partial<Stage>
     ) { }
 }
 

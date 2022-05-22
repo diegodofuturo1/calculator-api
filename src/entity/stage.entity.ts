@@ -5,16 +5,16 @@ export class Stage {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ default: 0 })
   start: number;
 
-  @Column()
+  @Column({ nullable: false })
   level: number;
 
-  @Column()
+  @Column({ default: 0 })
   end: number;
 
-  @Column()
+  @Column({ default: 1 })
   times: number;
 
   @Column({ default: 'created' })
