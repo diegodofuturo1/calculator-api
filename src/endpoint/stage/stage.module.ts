@@ -10,6 +10,7 @@ import { DeleteStageCommandHandler } from "./command/delete-stage.command";
 import { UpdateStageCommandHandler } from "./command/update-stage.command";
 import { ReadStageByIdQueryHandler } from "./query/read-stage-by-id.query";
 import { ReadStageByLevelQueryHandler } from "./query/read-stage-by-level.query";
+import { ReadNewStageQueryHandler } from "./query/read-new-stage.query";
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ReadStageByLevelQueryHandler } from "./query/read-stage-by-level.query"
     UpdateStageCommandHandler,
     ReadStageByIdQueryHandler,
     ReadStageQueryHandler,
+    ReadNewStageQueryHandler,
     ReadStageByLevelQueryHandler
   ],
   exports: [

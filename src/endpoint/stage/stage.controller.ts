@@ -6,11 +6,16 @@ import { Controller, Get, Body, Post, Put, Delete, Param } from '@nestjs/common'
 @ApiTags('stages')
 @Controller('stage')
 export class StageController {
-  constructor(private readonly service: StageService) {}
+  constructor(private readonly service: StageService) { }
 
   @Get()
   async getStage() {
     return await this.service.getStage();
+  }
+
+  @Get('new')
+  async getNewStage() {
+    return await this.service.getNewStage();
   }
 
   @Get(':id')
