@@ -18,6 +18,11 @@ export class StageController {
     return await this.service.getNewStage();
   }
 
+  @Get('last')
+  async getLastStage() {
+    return await this.service.getLastStage();
+  }
+
   @Get(':id')
   async getStageById(@Param('id') id: string) {
     return await this.service.getStageById(id);

@@ -8,6 +8,7 @@ import { ReadStageByIdQuery } from './query/read-stage-by-id.query';
 import { UpdateStageCommand } from './command/update-stage.command';
 import { ReadStageByLevelQuery } from './query/read-stage-by-level.query';
 import { ReadNewStageQuery } from './query/read-new-stage.query';
+import { ReadLastStageQuery } from './query/read-last-stage.query';
 
 @Injectable()
 export class StageService {
@@ -26,6 +27,10 @@ export class StageService {
 
     async getNewStage(): Promise<Stage> {
         return await this.queryBus.execute(new ReadNewStageQuery());
+    }
+
+    async getLastStage(): Promise<Stage> {
+        return await this.queryBus.execute(new ReadLastStageQuery());
     }
 
     async getStageByLevel(level: number): Promise<Stage> {
