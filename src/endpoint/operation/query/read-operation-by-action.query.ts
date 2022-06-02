@@ -21,8 +21,11 @@ export class ReadOperationByActionQueryHandler implements IQueryHandler {
         const { actionId } = query
 
         const operations = await this.repository.query(
-            'SELECT * FROM `Operation` `O` INNER JOIN `ActionOperation` `A` ON `A`.`operationId` = `O`.`id` WHERE `A`.`actionId` = ?',
-             [ actionId ]
+            'SELECT * FROM `Operation` `O`' + 
+            'INNER JOIN `ActionOperation` `A` ON `A`.`operationId` = `O`.`id`' + 
+            'WHERE `A`.`actionId` = ?' +
+            'ORDER BY `A`.order;',
+            [ actionId ]
         )
 
         if (!operations || !operations.length)

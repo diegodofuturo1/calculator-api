@@ -27,15 +27,24 @@ export class ReadActionOperationByStageQueryHandler implements IQueryHandler {
     async execute(query: ReadActionOperationByStageQuery): Promise<ActionDto[]> {
         const { stageId } = query
         const actions = await this.actionRepository.find({ stageId })
-
+        
         const promises = actions.map(async action => {
             const actionId = action.id
 
-            const relations = await this.actionOperationRepository.find({ actionId })
+            const relations = await this.actionOperationRepository.createQueryBuilder('A')
+            .where('A.actionId = :actionId', { actionId })
+            .orderBy('A.order')
+            .getMany()
 
-            const promises = relations.map(async relate => await this.operationRepository.findOne({ id: relate.operationId }))
+
+            const promises = relations.map(async ({ operationId, order }) => {
+                const operation = await this.operationRepository.findOne({ id: operationId })
+                return { ...operation, order }
+            })
 
             const operations = await Promise.all(promises)
+            
+            console.table(operations)
 
             return {
                 ...action,
